@@ -7,7 +7,7 @@
 #include "errors.h"
 #include "helper.h"
 #include "model3d.h"
-#include "vertex.h"
+#include "edge.h"
 
 #define TARGET_FPS 60
 
@@ -21,7 +21,7 @@
 #define BACKGROUND_COLOR (Color{ 0x18, 0x18, 0x18, 0xff })
 #endif
 
-#define FOV 10.0f // Not shure about what exactly this is
+#define FOCAL_LENGTH 10.0f
 
 #define SCALE 100.0f
 
@@ -30,15 +30,28 @@
 
 #define ARR_LEN(arr) (sizeof(arr) / sizeof((arr)[0]))
 
+// // Standard film size
+// int filmHeight = 24;
+// int filmWidth = 36;
+
+// // Formula to convert focalLength to field of view - In Unity they use Vertical FOV.
+// // So we use the filmHeight to calculate Vertical FOV.
+// double fovdub = Mathf.Rad2Deg * 2.0 * Math.Atan(filmHeight  / (2.0 * focalLen));
+// float fov = (float) fovdub;
+
+// or
+
+// hFov = 2 * atan(tan( vFov/2 ) * width/height)
+
 // Why not? :)
 #include "cube.h"
 
-Vector2 projection(const Vector3 *point3d, float fov)
+Vector2 projection(const Vector3 *point3d, float focal_length)
 {
     Vector2 res;
 
-    res.x = (fov * point3d->x) / (fov + point3d->z);
-    res.y = (fov * point3d->y) / (fov + point3d->z);
+    res.x = (focal_length * point3d->x) / (focal_length + point3d->z);
+    res.y = (focal_length * point3d->y) / (focal_length + point3d->z);
 
     return res;
 }
@@ -59,8 +72,8 @@ int main(int argc, char *argv[])
     Model3D cube_model = {
         cube_vertices,
         ARR_LEN(cube_vertices),
-        cube_points,
-        ARR_LEN(cube_points),
+        cube_edges,
+        ARR_LEN(cube_edges),
         0, 0, 0,
         1, 1, 1
     };
@@ -83,15 +96,15 @@ int main(int argc, char *argv[])
 
         // Render
 
-        for (size_t vert = 0; vert < cube_model.vert_cnt; vert++)
+        for (size_t edge = 0; edge < cube_model.edges_cnt; edge++)
         {
-            Vertex *v = &cube_model.vertices[vert];
+            Edge *e = &cube_model.edges[edge];
 
-            Vector3 new_start3d = Vector3RotateByAxisAngle(cube_model.points[v->start], (Vector3){ 0, 0, 1 }, rotation);
-            Vector3 new_end3d = Vector3RotateByAxisAngle(cube_model.points[v->end], (Vector3){ 0, 0, 1 }, rotation);
+            Vector3 new_start3d = Vector3RotateByAxisAngle(cube_model.vertices[e->start], (Vector3){ 0, 1, 0 }, rotation);
+            Vector3 new_end3d = Vector3RotateByAxisAngle(cube_model.vertices[e->end], (Vector3){ 0, 1, 0 }, rotation);
 
-            Vector2 start = projection(&new_start3d, FOV);
-            Vector2 end = projection(&new_end3d, FOV);
+            Vector2 start = projection(&new_start3d, FOCAL_LENGTH);
+            Vector2 end = projection(&new_end3d, FOCAL_LENGTH);
             start = Vector2Add(Vector2Scale(start, SCALE), (Vector2){ WINDOW_WIDTH / 2.0, WINDOW_HEIGHT / 2.0 });
             end = Vector2Add(Vector2Scale(end, SCALE), (Vector2){ WINDOW_WIDTH / 2.0, WINDOW_HEIGHT / 2.0 });
 

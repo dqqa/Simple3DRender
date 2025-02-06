@@ -3,16 +3,16 @@
 
 #include "raylib.h"
 
-#include "vertex.h"
+#include "edge.h"
 #include <stddef.h>
 
 typedef struct __model3d
 {
-    Vertex *vertices;
-    size_t vert_cnt;
+    Vector3 *vertices;
+    size_t vertices_cnt;
 
-    Vector3 *points;
-    size_t points_cnt;
+    Edge *edges;
+    size_t edges_cnt;
 
     float rotation_x;
     float rotation_y;

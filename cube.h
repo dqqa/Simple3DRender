@@ -1,4 +1,4 @@
-Vector3 cube_points[] = {
+Vector3 cube_vertices[] = {
     { -1, -1, -1 },
     { -1, -1, 1 },
     { 1, -1, -1 },
@@ -9,7 +9,7 @@ Vector3 cube_points[] = {
     { 1, 1, 1 }
 };
 
-Vertex cube_vertices[] = {
+Edge cube_edges[] = {
     { 0, 1 },
     { 0, 2 },
     { 0, 3 },
