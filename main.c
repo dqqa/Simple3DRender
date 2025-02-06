@@ -15,6 +15,12 @@
 #define WINDOW_HEIGHT 600
 #define WINDOW_TITLE "Simeple minimalistic 3D renderer using RayLib"
 
+#ifndef __cplusplus
+#define BACKGROUND_COLOR ((Color){ 0x18, 0x18, 0x18, 0xff })
+#else
+#define BACKGROUND_COLOR (Color{ 0x18, 0x18, 0x18, 0xff })
+#endif
+
 #define ROTATION_SPEED 0.01f
 
 #define ARR_LEN(arr) (sizeof(arr) / sizeof((arr)[0]))
@@ -24,7 +30,9 @@
 
 int main(int argc, char *argv[])
 {
-    const char *prg_name = shift_args(&argc, &argv);
+    (void)argc;
+    (void)argv;
+    // const char *prg_name = shift_args(&argc, &argv);
     // const char *model_filename = shift_args(&argc, &argv);
 
     // if (!model_filename)
@@ -53,8 +61,14 @@ int main(int argc, char *argv[])
         float dt = GetFrameTime();
         (void)dt;
         BeginDrawing();
+        ClearBackground(BACKGROUND_COLOR);
 
         // Render
+#ifdef DEBUG
+        char buf[256];
+        snprintf(buf, sizeof(buf), "FPS: %7.2f", 1.0f / dt);
+        DrawText(buf, 10, 10, 20, WHITE);
+#endif
 
         EndDrawing();
     }
