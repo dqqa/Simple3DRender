@@ -13,7 +13,7 @@
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
-#define WINDOW_TITLE "Simeple minimalistic 3D renderer using RayLib"
+#define WINDOW_TITLE "Simple minimalistic 3D renderer using RayLib"
 
 #ifndef __cplusplus
 #define BACKGROUND_COLOR ((Color){ 0x18, 0x18, 0x18, 0xff })
@@ -100,8 +100,8 @@ int main(int argc, char *argv[])
         {
             Edge *e = &cube_model.edges[edge];
 
-            Vector3 new_start3d = Vector3RotateByAxisAngle(cube_model.vertices[e->start], (Vector3){ 0, 1, 0 }, rotation);
-            Vector3 new_end3d = Vector3RotateByAxisAngle(cube_model.vertices[e->end], (Vector3){ 0, 1, 0 }, rotation);
+            Vector3 new_start3d = Vector3RotateByAxisAngle(cube_model.vertices[e->start], (Vector3){ 1, 1, 1 }, rotation);
+            Vector3 new_end3d = Vector3RotateByAxisAngle(cube_model.vertices[e->end], (Vector3){ 1, 1, 1 }, rotation);
 
             Vector2 start = projection(&new_start3d, FOCAL_LENGTH);
             Vector2 end = projection(&new_end3d, FOCAL_LENGTH);
